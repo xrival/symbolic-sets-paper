@@ -1,0 +1,38 @@
+\section{Logic and Set Abstraction}
+\label{sec:logic-and-set-abstraction}
+
+In this section we present the logical underpinnings of our class of set abstractions.  We are interested in a subclass of sets where sets are purely symbolic.  A \emph{purely symbolic set abstraction} is an abstraction for sets that places no requirements on the type or capabilities of the values stored within the set.  It does this by not allowing the expression of values within the logic.
+
+In this paper, we use symbols $W$, $X$, $Y$, and $Z$ to represent set variables in $\setvars$.  We use $\state$ to represent a concrete state in $\states$ and we use $\abstract$ to represent an abstract state in $\abstracts$.
+
+\begin{definition}[Symbolic Sets]
+    Symbolic sets are defined by the following grammar:
+    
+    \begin{align*}
+        L ::= & \ L \wedge L \ | \ E = E \ | \ E \subseteq E \ | \ \card{X} = 1 \ | \ \top \ | \ \bot \\
+        E ::= & \ \emptyset \ | \ X \ | \ \comp{E} \ | \ E \cup E \ | \ E \uplus E \ | \ E \cap E
+    \end{align*}
+\end{definition}
+
+\begin{definition}[Concrete Set State]
+    A concrete set state maps set variables to sets of values:
+    \begin{align*}
+        \state \in \states = \setvars \rightarrow \powerset{\values}
+    \end{align*}
+\end{definition}
+
+\begin{align*}
+  & \state, c \models \emptyset \textrm{ iff } c = \emptyset \qquad \state, c \models X \textrm{ iff } c = \state(X) \\
+  & \state, c \models \comp{E} \textrm{ iff } \state, c' \models{E} \textrm{ and } c \uplus c' = \values \\
+  & \state, c \models E_1 \cup E_2 \textrm{ iff } \state, c_1 \models E_1 \textrm{ and } \state, c_2 \models E_2 \textrm{ and } c = c_1 \cup c_2 \\
+  & \state, c \models E_1 \uplus E_2 \textrm{ iff } \state, c_1 \models E_1 \textrm{ and } \state, c_2 \models E_2 \textrm{ and } c = c_1 \cup c_2 \textrm{ and } c_1 \cap c_2 = \emptyset \\
+  & \state, c \models E_1 \cap E_2 \textrm{ iff } \state, c_1 \models E_1 \textrm{ and } \state, c_2 \models E_2 \textrm{ and } c = c_1 \cap c_2
+\end{align*}
+
+\begin{align*}
+  & \state \models L_1 \wedge L_2 \textrm{ iff } \state \models L_1 \textrm{ and } \state \models L_2 \\
+  & \state \models E_1 = E_2 \textrm{ iff } \state, c_1 \models E_1 \textrm{ and } \state, c_2 \models E_2 \textrm{ and } c_1 = c_2 \\
+  & \state \models E_1 \subseteq E_2 \textrm{ iff } \state, c_1 \models E_1 \textrm{ and } \state, c_2 \models E_2 \textrm{ and } c_1 \subseteq c_2 \\
+  & \state \models \card{E} = 1 \textrm{ iff } \state, c \models E \textrm{ and } \exists v \in \values. \; c = \{v\} \\
+  & \state \models \top \qquad \state \not\models \bot
+\end{align*}
